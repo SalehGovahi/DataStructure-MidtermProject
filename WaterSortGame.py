@@ -8,7 +8,7 @@ class WaterSortGame:
         self.colors = colors_list
         self.num_bottles = len(self.colors) + 1
         self.initialize_tubes()
-        self.highlight_tube_index = 0
+        self.selected_bottle = 0
 
     def initialize_tubes(self):
         for _ in range(self.num_bottles - 1):  # Create n color-filled tubes
@@ -37,8 +37,8 @@ class WaterSortGame:
             self.tubes.append(node)
 
     def display_game_state(self):
-        if self.highlight_tube_index != 0:
-            self.highlight_tube_index -= 1
+        if self.selected_bottle != 0:
+            self.selected_bottle -= 1
         tube_states = self.tubes.to_list_of_lists()
         max_level = max(len(tube) for tube in tube_states)
 
@@ -53,8 +53,9 @@ class WaterSortGame:
                 print(f"{color:<{column_width}}", end="")
                 # Print separator line if on the bottom row of the highlighted tube
             print()
-        seperator = " " * (column_width * self.highlight_tube_index) + '---#---'
+        seperator = " " * (column_width * self.selected_bottle) + '---#---'
         print(seperator)
+
 
 
 def main():
@@ -62,12 +63,14 @@ def main():
     user_input = input()
     parts = user_input.split()
 
+
     if parts[0] == 'start' and len(parts) > 2:
         colors_list = parts[1:-1]
         max_bottle_size = int(parts[-1])
 
         game = WaterSortGame(colors_list, max_bottle_size)
         game.display_game_state()
+        game.select(3)
     else:
         print("Invalid input format. Please use the format: 'start color1 color2 ... colorN maxBottleSize'")
 
